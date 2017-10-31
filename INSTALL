@@ -1,0 +1,9 @@
+Building InterstellarHoldings
+
+See doc/readme-qt.rst for instructions on building InterstellarHoldings QT,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of InterstellarHoldings.
+
+See doc/build-*.txt for instructions on building InterstellarHoldingsd,
+the intended-for-services, no-graphical-interface, reference
+implementation of InterstellarHoldings.
