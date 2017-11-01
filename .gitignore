@@ -1,5 +1,6 @@
 .qmake*
 Makefile*
+!src/Makefile*
 object_script.*
 release
 src/*.exe
