@@ -3,7 +3,7 @@
 <plist version="0.9">
 <dict>
 	<key>CFBundleIconFile</key>
-	<string>bitcoin.icns</string>
+	<string>InterstellarHoldings.icns</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleGetInfoString</key>
@@ -14,20 +14,24 @@
 	<string>InterstellarHoldings-Qt</string>
 	<key>CFBundleIdentifier</key>
 	<string>co.interstellarholdings.InterstellarHoldings-Qt</string>
-        <key>CFBundleURLTypes</key>
-        <array>
-          <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLName</key>
-            <string>co.interstellarholdings.InterstellarHoldingsPayment</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-              <string>interstellarholdings</string>
-            </array>
-          </dict>
-        </array>
-        <key>LSAppNapIsDisabled</key>
-          <string>True</string>
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeRole</key>
+      <string>Editor</string>
+      <key>CFBundleURLName</key>
+      <string>co.interstellarholdings.InterstellarHoldingsPayment</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>interstellarholdings</string>
+      </array>
+    </dict>
+  </array>
+  <key>NSPrincipalClass</key>
+  <string>NSApplication</string>
+  <key>NSHighResolutionCapable</key>
+  <string>True</string>
+  <key>LSAppNapIsDisabled</key>
+  <string>True</string>
 </dict>
 </plist>
