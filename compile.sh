@@ -9,8 +9,8 @@ i686-w64-mingw32.static-qmake-qt5 \
         BOOST_LIB_PATH=$MXE_LIB_PATH \
         OPENSSL_INCLUDE_PATH=$MXE_INCLUDE_PATH/openssl \
         OPENSSL_LIB_PATH=$MXE_LIB_PATH \
-        BDB_INCLUDE_PATH=$MXE_INCLUDE_PATH \
-        BDB_LIB_PATH=$MXE_LIB_PATH \
+        BDB_INCLUDE_PATH=$MXE_INCLUDE_PATH/../db4.8.30.NC/include \
+        BDB_LIB_PATH=$MXE_LIB_PATH/../db4.8.30.NC/lib \
         MINIUPNPC_INCLUDE_PATH=$MXE_INCLUDE_PATH \
         MINIUPNPC_LIB_PATH=$MXE_LIB_PATH \
         QMAKE_LRELEASE=/opt/mxe/usr/i686-w64-mingw32.static/qt5/bin/lrelease InterstellarHoldings-qt.pro
