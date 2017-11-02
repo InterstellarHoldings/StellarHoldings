@@ -1,6 +1,6 @@
 #!/bin/bash
 MXE_INCLUDE_PATH=/opt/mxe/usr/i686-w64-mingw32.static/include
-MXE_LIB_PATH=/opt/mnt/mxe/usr/i686-w64-mingw32.static/lib
+MXE_LIB_PATH=/opt/mxe/usr/i686-w64-mingw32.static/lib
 
 i686-w64-mingw32.static-qmake-qt5 \
         BOOST_LIB_SUFFIX=-mt \
