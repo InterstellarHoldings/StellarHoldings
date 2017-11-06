@@ -20,6 +20,8 @@ src/build.h
 *.qm
 Makefile
 InterstellarHoldings-qt
+InterstellarHoldings-Qt.app
+InterstellarHoldings-Qt.dmg
 #resources cpp
 qrc_*.cpp
 #qt creator
