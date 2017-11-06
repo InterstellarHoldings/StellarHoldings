@@ -261,7 +261,10 @@ static bool GetKernelStakeModifier(uint256 hashBlockFrom, uint256& nStakeModifie
 static bool CheckStakeKernelHashV2(CBlockIndex* pindexPrev, unsigned int nBits, unsigned int nTimeBlockFrom, const CTransaction& txPrev, const COutPoint& prevout, unsigned int nTimeTx, uint256& hashProofOfStake, uint256& targetProofOfStake, bool fPrintProofOfStake)
 {
     if (nTimeTx < txPrev.nTime)  // Transaction timestamp violation
-        return error("CheckStakeKernelHash() : nTime violation");
+        return error("CheckStakeKernelHashV2() : nTime violation");
+
+    if (pindexPrev->nHeight > 4000 && nTimeBlockFrom + nStakeMinAge > nTimeTx) // min age requirement
+        return error("CheckStakeKernelHashV2() : min age violation");
 
     // Base target
     CBigNum bnTarget;
@@ -376,6 +379,9 @@ bool CheckKernel(CBlockIndex* pindexPrev, unsigned int nBits, int64_t nTime, con
     CBlock block;
     if (!block.ReadFromDisk(txindex.pos.nFile, txindex.pos.nBlockPos, false))
         return false;
+
+    if (pindexPrev->nHeight > 3100 && block.GetBlockTime() + nStakeMinAge > nTime)
+        return false; // only count coins meeting min age requirement
 
     int nDepth;
     if (IsConfirmedInNPrevBlocks(txindex, pindexPrev, nStakeMinConfirmations - 1, nDepth))

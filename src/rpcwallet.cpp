@@ -293,25 +293,14 @@ Value sendtoaddress(const Array& params, bool fHelp)
 
 Value burn(const Array& params, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 2)
+    if (fHelp || params.size() < 1 || params.size() > 1)
         throw runtime_error(
-            "burn <amount> [hex string]\n"
+            "burn <amount>\n"
             "<amount> is a real and is rounded to the nearest 0.00000001"
             + HelpRequiringPassphrase());
 
     CScript scriptPubKey;
-
-    if (params.size() > 1) {
-        vector<unsigned char> data;
-        if (params[1].get_str().size() > 0){
-            data = ParseHexV(params[1], "data");
-        } else {
-            // Empty data is valid
-        }
-        scriptPubKey = CScript() << OP_RETURN << data;
-    } else {
-        scriptPubKey = CScript() << OP_RETURN;
-    }
+    scriptPubKey = CScript() << OP_RETURN << OP_BURN;
 
     // Amount
     int64_t nAmount = AmountFromValue(params[0]);
