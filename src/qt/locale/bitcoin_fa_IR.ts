@@ -1698,7 +1698,7 @@ Address: %4
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-171"/>
-        <source>Enter a InterstellarHoldings address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
+        <source>Enter a InterstellarHoldings address (e.g. HG6jDsuUnmmKEiNjVbRmG5vRpMvzUycoaR)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1826,7 +1826,7 @@ Address: %4
     </message>
     <message>
         <location line="+34"/>
-        <source>The address to send the payment to (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
+        <source>The address to send the payment to (e.g. HG6jDsuUnmmKEiNjVbRmG5vRpMvzUycoaR)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1867,7 +1867,7 @@ Address: %4
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a InterstellarHoldings address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
+        <source>Enter a InterstellarHoldings address (e.g. HG6jDsuUnmmKEiNjVbRmG5vRpMvzUycoaR)</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -1891,7 +1891,7 @@ Address: %4
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to sign the message with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
+        <source>The address to sign the message with (e.g. HG6jDsuUnmmKEiNjVbRmG5vRpMvzUycoaR)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1955,7 +1955,7 @@ Address: %4
     </message>
     <message>
         <location line="+21"/>
-        <source>The address the message was signed with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
+        <source>The address the message was signed with (e.g. HG6jDsuUnmmKEiNjVbRmG5vRpMvzUycoaR)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1971,7 +1971,7 @@ Address: %4
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a InterstellarHoldings address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
+        <source>Enter a InterstellarHoldings address (e.g. HG6jDsuUnmmKEiNjVbRmG5vRpMvzUycoaR)</source>
         <translation type="unfinished"/>
     </message>
     <message>
