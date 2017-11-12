@@ -969,19 +969,22 @@ static CBigNum GetProofOfStakeLimit(int nHeight)
 // miner's coin base reward
 int64_t GetProofOfWorkReward(int64_t nFees)
 {
+    // Defaults to 100 coins per block.
     int64_t nSubsidy = 100 * COIN;
 
-    // Premine 5% (100 millions)
+    // Premine 5% (50 millions)
     if(pindexBest->nHeight == 5) {
         nSubsidy = 50000000 * COIN;
-    } else if(pindexBest->nHeight >= 0 && pindexBest->nHeight <= 2500) {
+    } else if (pindexBest->nHeight >= 0 && pindexBest->nHeight <= 2500) {
         nSubsidy = 1 * COIN;
-    } else if(pindexBest->nHeight > 2500 && pindexBest->nHeight <= 10000) {
+    } else if (pindexBest->nHeight > 2500 && pindexBest->nHeight <= 10000) {
         nSubsidy = 50 * COIN;
-    } else {
-        nSubsidy = 100 * COIN;
+    } else if (pindexBest->nHeight > 10000 && pindexBest->nHeight < 15000) {
+        nSubsidy = 0;
+    } else if (pindexBest->nHeight >= 15000 && pindexBest->nHeight <= 25000) {
+        nSubsidy = 150 * COIN;
     }
-        
+
     LogPrint("creation", "GetProofOfWorkReward() : create=%s nSubsidy=%d\n", FormatMoney(nSubsidy), nSubsidy);
 
     return nSubsidy + nFees;
@@ -2035,7 +2038,8 @@ bool CBlock::AcceptBlock()
     if (nVersion < 7)
         return DoS(100, error("AcceptBlock() : reject too old nVersion = %d", nVersion));
 
-    if (IsProofOfWork() && nHeight > Params().LastPOWBlock())
+    // blocks 10k to 15k have POW disabled.
+    if (IsProofOfWork() && ((nHeight > 10000 && nHeight < 15000) || nHeight > Params().LastPOWBlock()))
         return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
 
     // Check coinbase timestamp
