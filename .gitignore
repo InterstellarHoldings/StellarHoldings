@@ -32,3 +32,8 @@ build
 .vscode
 
 !src/leveldb/Makefile
+
+src/.deps
+src/qt/.deps
+src/qt/moc_*.cpp
+src/qt/forms/ui_*.h

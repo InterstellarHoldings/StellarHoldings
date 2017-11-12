@@ -37,6 +37,8 @@
 #include "macdockiconhandler.h"
 #endif
 
+#include "calcdialog.h"
+
 #include <QMenuBar>
 #include <QMenu>
 #include <QIcon>
@@ -290,6 +292,8 @@ void BitcoinGUI::createActions()
     openRPCConsoleAction = new QAction(tr("&Debug window"), this);
     openRPCConsoleAction->setToolTip(tr("Open debugging and diagnostic console"));
 
+	calcAction = new QAction(tr("&Stake Calculator"), this);
+    
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClicked()));
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
@@ -302,6 +306,8 @@ void BitcoinGUI::createActions()
     connect(lockWalletAction, SIGNAL(triggered()), this, SLOT(lockWallet()));
     connect(signMessageAction, SIGNAL(triggered()), this, SLOT(gotoSignMessageTab()));
     connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
+	connect(calcAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+	connect(calcAction, SIGNAL(triggered()), this, SLOT(calcClicked()));
 }
 
 void BitcoinGUI::createMenuBar()
@@ -320,6 +326,10 @@ void BitcoinGUI::createMenuBar()
     file->addAction(verifyMessageAction);
     file->addSeparator();
     file->addAction(quitAction);
+
+    // Tools
+    QMenu *tools = appMenuBar->addMenu(tr("&Tools"));
+    tools->addAction(calcAction);    
 
     QMenu *settings = appMenuBar->addMenu(tr("&Settings"));
     settings->addAction(encryptWalletAction);
@@ -1010,4 +1020,10 @@ void BitcoinGUI::detectShutdown()
 {
     if (ShutdownRequested())
         QMetaObject::invokeMethod(QCoreApplication::instance(), "quit", Qt::QueuedConnection);
+}
+
+void BitcoinGUI::calcClicked()
+{
+    calcDialog dlg;
+    dlg.exec();
 }

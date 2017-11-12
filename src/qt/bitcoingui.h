@@ -94,6 +94,7 @@ private:
     QAction *lockWalletAction;
     QAction *aboutQtAction;
     QAction *openRPCConsoleAction;
+    QAction *calcAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
@@ -196,6 +197,9 @@ private slots:
 
     /** called by a timer to check if fRequestShutdown has been set **/
     void detectShutdown();
+
+	/** Show Stake Calculator Dialog */
+    void calcClicked();
 };
 
 #endif // BITCOINGUI_H
