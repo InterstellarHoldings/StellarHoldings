@@ -47,7 +47,7 @@ void calcDialog::pushButtonClicked()
     if(nUserAmount * nTargetDays < nAverageWeight)
     {
         qint64 nUserWeightAtTarget = nUserAmount * nTargetDays;
-        ui->avgWeightResult->setText(strAvgSize + QString(" It is recommended that you do not split your HOLD. %1 HOLD will yield a weight of <b>%2</b> on day %3, which is %4 less weight than the median weight staked in the last %5 blocks.")
+        ui->avgWeightResult->setText(strAvgSize + QString(" It is recommended that you do not split your HOLD. %1 HOLD will yield a weight of <b>%2</b> on day %3, which is %4 less weight than the average weight staked in the last %5 blocks.")
                                      .arg(us.toString(nUserAmount))
                                      .arg(us.toString(nUserWeightAtTarget))
                                      .arg(us.toString(nTargetDays))
