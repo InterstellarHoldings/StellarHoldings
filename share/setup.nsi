@@ -51,7 +51,7 @@ CRCCheck on
 XPStyle on
 BrandingText " "
 ShowInstDetails show
-VIProductVersion 1.0.0.2
+VIProductVersion 1.0.1.0
 VIAddVersionKey ProductName InterstellarHoldings
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"

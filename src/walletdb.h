@@ -95,6 +95,8 @@ public:
     bool ReadBestBlock(CBlockLocator& locator);
 
     bool WriteOrderPosNext(int64_t nOrderPosNext);
+    
+    bool WriteStakeSplitThreshold(uint64_t nStakeSplitThreshold);
 
     bool WriteDefaultKey(const CPubKey& vchPubKey);
 

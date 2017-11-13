@@ -37,6 +37,8 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
 #if QT_VERSION >= 0x040700
     /* Do not move this to the XML file, Qt before 4.7 will choke on it */
     ui->lineEditCoinControlChange->setPlaceholderText(tr("Enter a InterstellarHoldings address (e.g. HG6jDsuUnmmKEiNjVbRmG5vRpMvzUycoaR)"));
+    ui->splitBlockLineEdit->setPlaceholderText(tr("# of Blocks"));
+    ui->splitBlockCheckBox->setToolTip(tr("Enable/Disable Block Splitting"));
 #endif
 
     addEntry();
@@ -49,6 +51,8 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
     connect(ui->pushButtonCoinControl, SIGNAL(clicked()), this, SLOT(coinControlButtonClicked()));
     connect(ui->checkBoxCoinControlChange, SIGNAL(stateChanged(int)), this, SLOT(coinControlChangeChecked(int)));
     connect(ui->lineEditCoinControlChange, SIGNAL(textEdited(const QString &)), this, SLOT(coinControlChangeEdited(const QString &)));
+    connect(ui->splitBlockCheckBox, SIGNAL(stateChanged(int)), this, SLOT(coinControlSplitBlockChecked(int)));
+    connect(ui->splitBlockLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(splitBlockLineEditChanged(const QString &)));
 
     // Coin Control: clipboard actions
     QAction *clipboardQuantityAction = new QAction(tr("Copy quantity"), this);
@@ -120,6 +124,16 @@ void SendCoinsDialog::on_sendButton_clicked()
     for(int i = 0; i < ui->entries->count(); ++i)
     {
         SendCoinsEntry *entry = qobject_cast<SendCoinsEntry*>(ui->entries->itemAt(i)->widget());
+        CBitcoinAddress address = entry->getValue().address.toStdString();
+        if (!model->isMine(address) && ui->splitBlockCheckBox->checkState() == Qt::Checked)
+        {
+            model->setSplitBlock(false); // dont allow block splitting if recipient is an external address.
+            ui->splitBlockCheckBox->setCheckState(Qt::Unchecked);
+            QMessageBox::warning(this, tr("Send Coins"),
+                tr("The split block feature does not work when sending to external addresses. Please try again."),
+                QMessageBox::Ok, QMessageBox::Ok);
+            return;
+        }
         if(entry)
         {
             if(entry->validate())
@@ -138,11 +152,53 @@ void SendCoinsDialog::on_sendButton_clicked()
         return;
     }
 
+    // Set split block
+    int nSplitBlock = 1;
+    if (ui->splitBlockCheckBox->checkState() == Qt::Checked)
+        model->setSplitBlock(true);
+    else
+        model->setSplitBlock(false);
+
+    // Can't block split with multiple addresses.
+    if (ui->entries->count() > 1 && ui->splitBlockCheckBox->checkState() == Qt::Checked)
+    {
+        model->setSplitBlock(false);
+        ui->splitBlockCheckBox->setCheckState(Qt::Unchecked);
+        QMessageBox::warning(this, tr("Send Coins"),
+            tr("The split block feature does not work with multiple addresses. Please try again."),
+            QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    if (model->getSplitBlock())
+        nSplitBlock = int(ui->splitBlockLineEdit->text().toDouble());
+
     // Format confirmation message
     QStringList formatted;
     foreach(const SendCoinsRecipient &rcp, recipients)
     {
-        formatted.append(tr("<b>%1</b> to %2 (%3)").arg(BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), rcp.amount), Qt::escape(rcp.label), rcp.address));
+        if (!model->getSplitBlock())
+        {
+            #if QT_VERSION < 0x050000
+            formatted.append(tr("<b>%1</b> to %2 (%3)").arg(BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), rcp.amount), Qt::escape(rcp.label), rcp.address));
+            #else
+            formatted.append(tr("<b>%1</b> to %2 (%3)").arg(BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), rcp.amount), rcp.label.toHtmlEscaped(), rcp.address));
+            #endif
+        } else {
+            #if QT_VERSION < 0x050000
+            formatted.append(tr("<b>%1</b> in %4 blocks of %5 each to %2 (%3)?").arg(BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, rcp.amount),
+                Qt::escape(rcp.label),
+                rcp.address,
+                QString::number(nSplitBlock),
+                BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, rcp.amount / nSplitBlock)));
+            #else
+            formatted.append(tr("<b>%1</b> in %4 blocks of %5 each to %2 (%3)?").arg(BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, rcp.amount),
+                rcp.label.toHtmlEscaped(),
+                rcp.address,
+                QString::number(nSplitBlock),
+                BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, rcp.amount / nSplitBlock)));
+            #endif
+        }
     }
 
     fNewRecipientAllowed = false;
@@ -169,9 +225,9 @@ void SendCoinsDialog::on_sendButton_clicked()
     WalletModel::SendCoinsReturn sendstatus;
 
     if (!model->getOptionsModel() || !model->getOptionsModel()->getCoinControlFeatures())
-        sendstatus = model->sendCoins(recipients);
+        sendstatus = model->sendCoins(recipients, nSplitBlock);
     else
-        sendstatus = model->sendCoins(recipients, CoinControlDialog::coinControl);
+        sendstatus = model->sendCoins(recipients, nSplitBlock, CoinControlDialog::coinControl);
 
     switch(sendstatus.status)
     {
@@ -419,6 +475,39 @@ void SendCoinsDialog::coinControlButtonClicked()
     dlg.exec();
     coinControlUpdateLabels();
 }
+
+// Coin Control: split block
+void SendCoinsDialog::coinControlSplitBlockChecked(int state)
+{
+    if (model)
+    {
+        if (state == Qt::Checked)
+        {
+            model->setSplitBlock(true);
+            ui->splitBlockLineEdit->setEnabled(true);
+            ui->labelBlockSizeText->setEnabled(true);
+            ui->labelBlockSize->setEnabled(true);
+        }
+        else
+        {
+            model->setSplitBlock(false);
+            ui->splitBlockLineEdit->setEnabled(false);
+            ui->labelBlockSizeText->setEnabled(false);
+            ui->labelBlockSize->setEnabled(false);
+        }
+        coinControlUpdateLabels();
+    }
+}
+
+void SendCoinsDialog::splitBlockLineEditChanged(const QString & text)
+{
+    double nAfterFee = ui->labelCoinControlAfterFee->text().left(ui->labelCoinControlAfterFee->text().indexOf(" ")).toDouble();
+    double nSize = 0;
+    if (nAfterFee > 0 && text.toDouble() > 0)
+        nSize = nAfterFee / text.toDouble();
+    ui->labelBlockSize->setText(QString::number(nSize));
+}
+
 
 // Coin Control: checkbox custom change address
 void SendCoinsDialog::coinControlChangeChecked(int state)

@@ -703,7 +703,7 @@ Value sendmany(const Array& params, bool fHelp)
     // Send
     CReserveKey keyChange(pwalletMain);
     int64_t nFeeRequired = 0;
-    bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired);
+    bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, 1);
     if (!fCreated)
     {
         if (totalAmount + nFeeRequired > pwalletMain->GetBalance())
@@ -1600,4 +1600,49 @@ Value settxfee(const Array& params, bool fHelp)
     nTransactionFee = (nTransactionFee / CENT) * CENT;  // round to cent
 
     return true;
+}
+
+Value setstakesplitthreshold(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 1)
+        throw runtime_error(
+            "setstakesplitthreshold <amount>\n"
+            "This will set the output size of your stakes to never be below amount.\n");
+
+    int64_t nStakeSplitThreshold = params[0].get_int64();
+
+    if (pwalletMain->IsLocked())
+        throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Error: Unlock wallet to use this feature.");
+    if (nStakeSplitThreshold > 999999999)
+        return "out of range (1 - 999999999) - setting split threshold failed";
+
+    CWalletDB walletdb(pwalletMain->strWalletFile);
+    LOCK(pwalletMain->cs_wallet);
+    {
+        bool fFileBacked = pwalletMain->fFileBacked;
+
+        Object result;
+        pwalletMain->nStakeSplitThreshold = nStakeSplitThreshold;
+        result.push_back(Pair("split stake threshold set to ", int(pwalletMain->nStakeSplitThreshold)));
+        if (fFileBacked) {
+            walletdb.WriteStakeSplitThreshold(nStakeSplitThreshold);
+            result.push_back(Pair("saved to wallet.dat ", "true"));
+        } else {
+            result.push_back(Pair("saved to wallet.dat ", "false"));
+        }
+
+        return result;
+    }
+}
+
+Value getstakesplitthreshold(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 0)
+        throw runtime_error(
+            "getstakesplitthreshold\n"
+            "Returns the current split stake threshold.\n");
+
+    Object result;
+    result.push_back(Pair("split stake threshold ", int(pwalletMain->nStakeSplitThreshold)));
+    return result;
 }

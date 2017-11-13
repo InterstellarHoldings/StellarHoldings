@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
+    <width>1040</width>
     <height>500</height>
    </rect>
   </property>
@@ -238,6 +238,9 @@
      </item>
      <item>
       <layout class="QFormLayout" name="formLayoutCoinControl4">
+       <property name="fieldGrowthPolicy">
+        <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+       </property>      
        <property name="horizontalSpacing">
         <number>10</number>
        </property>
@@ -347,7 +350,7 @@
         <height>41</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayoutPanel" stretch="0,0,0,0,0">
+      <layout class="QHBoxLayout" name="horizontalLayoutPanel" stretch="0,0,0,0,0,0,0">
        <property name="spacing">
         <number>14</number>
        </property>
@@ -394,6 +397,42 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="labelLocked">
+          <property name="text">
+            <string notr="true">(1 locked)</string>
+          </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonCustomCC">
+         <property name="text">
+          <string>Select Coins</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="QComboBoxFilterCoins"/>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEditCustomCC">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>50</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -419,7 +458,7 @@
       <bool>false</bool>
      </property>
      <property name="columnCount">
-      <number>11</number>
+      <number>15</number>
      </property>
      <attribute name="headerShowSortIndicator" stdset="0">
       <bool>true</bool>
@@ -429,12 +468,40 @@
      </attribute>
      <column>
       <property name="text">
-       <string/>
+       <string>Select</string>
       </property>
      </column>
      <column>
       <property name="text">
        <string>Amount</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Confirmations</string>
+      </property>
+      <property name="toolTip">
+       <string>Confirmed</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Age</string> /** age **/
+      </property>
+     </column>
+	   <column>
+      <property name="text">
+       <string>Potential Stake</string>
+      </property>
+     </column>
+  	 <column>
+      <property name="text">
+       <string>Days to Stake (est.)</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Weight</string>
       </property>
      </column>
      <column>
@@ -454,15 +521,7 @@
      </column>
      <column>
       <property name="text">
-       <string>Confirmations</string>
-      </property>
-      <property name="toolTip">
-       <string>Confirmed</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Priority</string>
+       <string/>
       </property>
      </column>
      <column>
