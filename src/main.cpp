@@ -1034,13 +1034,20 @@ CBigNum GetAverageWeightOverPeriod(int nBlocksCount)
 	CBlockIndex* pindex = pindexBest;
 	int nEndHeight = pindex->nHeight - nBlocksCount;
 	CBigNum bnWeightSpent = 0;
+	CBigNum bnWeight = 0;
+
+	int nCount = 0;
 
 	while (pindex->nHeight > nEndHeight -1) {
-		bnWeightSpent += GetWeightSpent(pindex);
+		bnWeight = GetWeightSpent(pindex);
+		if (bnWeight > 0) {
+			bnWeightSpent += GetWeightSpent(pindex);
+			nCount++;
+		}
 		pindex = pindex->pprev;
 	}
 
-	return bnWeightSpent/nBlocksCount;
+	return bnWeightSpent/nCount;
 }
 
 static const int64_t nTargetTimespan = 16 * 60;  // 16 mins
@@ -2920,7 +2927,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 		CAddress addrFrom;
 		uint64_t nNonce = 1;
 		vRecv >> pfrom->nVersion >> pfrom->nServices >> nTime >> addrMe;
-		if (pfrom->nVersion < MIN_PEER_PROTO_VERSION)
+		if (pfrom->nVersion < MIN_PEER_PROTO_VERSION || (nBestHeight >= 15000 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_B15K))
 		{
 			// disconnect from peers older than this proto version
 			LogPrintf("partner %s using obsolete version %i; disconnecting\n", pfrom->addr.ToString(), pfrom->nVersion);
