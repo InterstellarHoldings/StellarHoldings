@@ -79,8 +79,8 @@ inline int64_t GetCoinYearReward(int nHeight) {
 inline int64_t FutureDrift(int64_t nTime) { return nTime + 10 * 60; }
 
 inline unsigned int GetTargetSpacing(int nHeight) {
-    // Starting at block 17k we raise the avergage block time to 4 minutes.
-    if (nHeight >= 17000)
+    // Starting at block 20k we raise the avergage block time to 4 minutes.
+    if (nHeight >= 20000)
         return 240;
 
     // defaults to 2 minutes.
