@@ -2927,7 +2927,9 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 		CAddress addrFrom;
 		uint64_t nNonce = 1;
 		vRecv >> pfrom->nVersion >> pfrom->nServices >> nTime >> addrMe;
-		if (pfrom->nVersion < MIN_PEER_PROTO_VERSION || (nBestHeight >= 15000 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_B15K))
+		if (pfrom->nVersion < MIN_PEER_PROTO_VERSION || 
+			(nBestHeight >= 15000 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_B15K)
+			(nBestHeight >= 17000 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_B17K))
 		{
 			// disconnect from peers older than this proto version
 			LogPrintf("partner %s using obsolete version %i; disconnecting\n", pfrom->addr.ToString(), pfrom->nVersion);
