@@ -134,7 +134,7 @@ public:
         nOrderPosNext = 0;
         nTimeFirstKey = 0;
         fSplitBlock = false;
-        nStakeSplitThreshold = 2000;
+        nStakeSplitThreshold = 10000;
     }
 
     std::map<uint256, CWalletTx> mapWallet;
