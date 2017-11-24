@@ -47,7 +47,7 @@ static const int64_t MIN_TX_FEE = 10000;
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying) */
 static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
 /** No amount larger than this (in satoshi) is valid */
-static const int64_t MAX_MONEY = 2000000000 * COIN; // 2 Billions CAP
+static const int64_t MAX_MONEY = 1500000000 * COIN; // 2 Billions CAP
 inline bool MoneyRange(int64_t nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 /** Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp. */
 static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
@@ -62,16 +62,46 @@ inline int64_t GetCoinYearReward(int nHeight) {
         YearPercent = 2500;
     } else if (nHeight > 10000 && nHeight <= 25000) {
         YearPercent = 5000;
-    } else if (nHeight > 25000 && nHeight <= 80000) {
-        YearPercent = 750;
-    } else if (nHeight > 80000 && nHeight <= 130000) {
-        YearPercent = 1000;
-    } else if (nHeight > 130000 && nHeight <= 170000) {
-        YearPercent = 2000;
-    } else if (nHeight > 170000 && nHeight <= 190000) {
-        YearPercent = 3600;
+    } else if (nHeight > 25000 && nHeight <= 35000) {
+        YearPercent = 500;
+    } else if (nHeight > 35000 && nHeight <= 45000) {
+        YearPercent = 375;
+    } else if (nHeight > 45000 && nHeight <= 46000) {
+        YearPercent = 500;
+    } else if (nHeight > 46000 && nHeight <= 56000) {
+        YearPercent = 375;
+    } else if (nHeight > 56000 && nHeight <= 57000) {
+        YearPercent = 500;
+    } else if (nHeight > 57000 && nHeight <= 67000) {
+        YearPercent = 375;
+    } else if (nHeight > 67000 && nHeight <= 68000) {
+        YearPercent = 500;
+    } else if (nHeight > 68000 && nHeight <= 70000) {
+        YearPercent = 800;
+    } else if (nHeight > 70000 && nHeight <= 100000) {
+        YearPercent = 500;
+    } else if (nHeight > 100000 && nHeight <= 105000) {
+        YearPercent = 800;
+    } else if (nHeight > 105000 && nHeight <= 130000) {
+        YearPercent = 500;
+    } else if (nHeight > 130000 && nHeight <= 140000) {
+        YearPercent = 800;
+    } else if (nHeight > 140000 && nHeight <= 150000) {
+        YearPercent = 500;
+    } else if (nHeight > 150000 && nHeight <= 152000) {
+        YearPercent = 625;
+    } else if (nHeight > 152000 && nHeight <= 162000) {
+        YearPercent = 500;
+    } else if (nHeight > 162000 && nHeight <= 165000) {
+        YearPercent = 625;
+    } else if (nHeight > 165000 && nHeight <= 180000) {
+        YearPercent = 500;
+    } else if (nHeight > 180000 && nHeight <= 190000) {
+        YearPercent = 850;
     } else if (nHeight > 190000 && nHeight <= 200000) {
-        YearPercent = 7200;
+        YearPercent = 1200;
+    } else if (nHeight > 200000) {
+        YearPercent = 375;
     }
 
     return YearPercent * CENT; // per year

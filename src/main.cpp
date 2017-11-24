@@ -43,6 +43,7 @@ CBigNum bnProofOfStakeLimit(~uint256(0) >> 48);
 
 int nStakeMinConfirmations = 30;
 unsigned int nStakeMinAge = 6 * 60 * 60; // 6 hours
+unsigned int nStakeMaxAge = 2 * (60 * 60 * 24); // 2 days
 unsigned int nModifierInterval = 10 * 60; // time to elapse before new modifier is computed
 
 int nCoinbaseMaturity = 30;
@@ -1021,6 +1022,11 @@ CBigNum GetWeightSpent(CBlockIndex* pindex)
 		return 0;
 
 	unsigned int nAge = block.GetBlockTime() - txPrev.nTime;
+
+	if (pindex->nHeight >= 25000) {
+		nAge = min(block.GetBlockTime() - txPrev.nTime, (int64_t)nStakeMaxAge);
+	}
+
 	uint64_t nAmount = txPrev.vout[txInStake.prevout.n].nValue;
 
 	return CBigNum((nAge / 86400) * (nAmount/COIN));
@@ -2504,6 +2510,7 @@ bool LoadBlockIndex(bool fAllowNew)
 	if (TestNet())
 	{
 		nStakeMinAge = 600; // 10 minutes
+		nStakeMaxAge = 60 * 60 * 1; // 1 hour
 		nStakeMinConfirmations = 10;
 		nCoinbaseMaturity = 10; // test maturity is 10 blocks
 	}
@@ -2929,7 +2936,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 		vRecv >> pfrom->nVersion >> pfrom->nServices >> nTime >> addrMe;
 		if (pfrom->nVersion < MIN_PEER_PROTO_VERSION || 
 			(nBestHeight >= 15000 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_B15K) ||
-			(nBestHeight >= 20000 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_B20K))
+			(nBestHeight >= 20000 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_B20K) ||
+			(nBestHeight >= 25000 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_B25K))
 		{
 			// disconnect from peers older than this proto version
 			LogPrintf("partner %s using obsolete version %i; disconnecting\n", pfrom->addr.ToString(), pfrom->nVersion);
