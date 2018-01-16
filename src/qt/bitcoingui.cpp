@@ -42,6 +42,7 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QIcon>
+#include <QFile>
 #include <QVBoxLayout>
 #include <QToolBar>
 #include <QStatusBar>
@@ -84,13 +85,22 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 {
     resize(850+95, 550);
     setWindowTitle(tr("InterstellarHoldings") + " - " + tr("Wallet"));
-#ifndef Q_OS_MAC
-    qApp->setWindowIcon(QIcon(":icons/bitcoin"));
-    setWindowIcon(QIcon(":icons/bitcoin"));
-#else
-    //setUnifiedTitleAndToolBarOnMac(true);
-    QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
-#endif
+
+    QFile styleFile(":/styles/holdify");
+    if (styleFile.open(QFile::ReadOnly)) {
+        QString HOLDTheme = QLatin1String(styleFile.readAll());
+        qApp->setStyleSheet(HOLDTheme);
+    } else {
+        qApp->setStyleSheet(QString(""));
+    }
+
+    #ifndef Q_OS_MAC
+        qApp->setWindowIcon(QIcon(":icons/bitcoin"));
+        setWindowIcon(QIcon(":icons/bitcoin"));
+    #else
+        //setUnifiedTitleAndToolBarOnMac(true);
+        QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
+    #endif
     // Accept D&D of URIs
     setAcceptDrops(true);
 
@@ -370,6 +380,8 @@ void BitcoinGUI::createToolBars()
 
     toolbar->setOrientation(Qt::Vertical);
     toolbar->setMovable(false);
+
+    toolbar->setStyleSheet("QToolButton { font: 14px; }");
 
     addToolBar(Qt::LeftToolBarArea, toolbar);
 

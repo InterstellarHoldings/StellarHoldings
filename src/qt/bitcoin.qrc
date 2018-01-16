@@ -1,4 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/styles">
+        <file alias="holdify">res/holdify.qss</file>
+    </qresource>
     <qresource prefix="/icons">
         <file alias="bitcoin">res/icons/InterstellarHoldings-80.png</file>
         <file alias="address-book">res/icons/address-book.png</file>
