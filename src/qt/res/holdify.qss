@@ -1,5 +1,10 @@
+FontLoader { id: QUANTICO; name: Quantico; source: ":/fonts/quantico" }
+FontLoader { id: ROBOTO_LIGHT; name: Roboto-Light; source: ":/fonts/roboto_light" }
+FontLoader { id: ROBOTO_REGULAR; name: Roboto-Regular; source: ":/fonts/roboto_regular" }
+
 QWidget {
     background: rgb(34,49,70);
+    font-family: Roboto-Light;
 }
 
 QFrame {
@@ -19,7 +24,9 @@ QPushButton {
     color: rgb(255,255,255);
     text-transform: uppercase;
     padding: 4px 8px;
+    margin: 0 4px;
     font-weight: bold;
+    font-family: Quantico;
 }
 
 QDoubleSpinBox {

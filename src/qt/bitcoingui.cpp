@@ -387,7 +387,7 @@ void BitcoinGUI::createToolBars()
     toolbar->setOrientation(Qt::Vertical);
     toolbar->setMovable(false);
 
-    toolbar->setStyleSheet("QToolButton { font: 14px; }");
+    toolbar->setStyleSheet("QToolButton { font: 13px; }");
 
     addToolBar(Qt::LeftToolBarArea, toolbar);
 
