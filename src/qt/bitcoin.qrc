@@ -28,6 +28,7 @@
         <file alias="add">res/icons/add.png</file>
         <file alias="bitcoin_testnet">res/icons/InterstellarHoldings-80.png</file>
         <file alias="toolbar_testnet">res/icons/InterstellarHoldings-16.png</file>
+        <file alias="sidebar_logo">res/icons/InterstellarHoldings-128.png</file>
         <file alias="edit">res/icons/edit.png</file>
         <file alias="history">res/icons/history.png</file>
         <file alias="overview">res/icons/overview.png</file>
@@ -46,7 +47,6 @@
         <file alias="debugwindow">res/icons/debugwindow.png</file>
         <file alias="staking_off">res/icons/staking_off.png</file>
         <file alias="staking_on">res/icons/staking_on.png</file>
-        <file alias="logo_backg">res/icons/logo_backg.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.png</file>

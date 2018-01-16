@@ -1,5 +1,5 @@
 QWidget {
-    background: rgb(41,44,48);
+    background: rgb(34,49,70);
 }
 
 QFrame {
@@ -15,8 +15,11 @@ QComboBox QAbstractItemView::item {
 }
 
 QPushButton {
-    background: rgb(255,221,85);
-    color: rgb(21,21,21);
+    background: rgb(21,165,211);
+    color: rgb(255,255,255);
+    text-transform: uppercase;
+    padding: 4px 8px;
+    font-weight: bold;
 }
 
 QDoubleSpinBox {
@@ -42,13 +45,13 @@ QPlainTextEdit {
 }
 
 QMenuBar {
-    background: rgb(41,44,48);
-    color: rgb(110,116,126);
+    background: rgb(34,49,70);
+    color: rgb(255,255,255);
 }
 
 QMenu {
-    background: rgb(24,26,30);
-    color: rgb(222,222,222);
+    background: rgb(22,39,61);
+    color: rgb(255,255,255);
 }
 
 QMenu::item:selected {
@@ -56,7 +59,7 @@ QMenu::item:selected {
 }
 
 QLabel {
-    color: rgb(120,127,139);
+    color: rgb(255,255,255);
 }
 
 QScrollBar {
@@ -70,25 +73,25 @@ QSpinBox {
 }
 
 QCheckBox {
-    color: rgb(120,127,139);
+    color: rgb(255,255,255);
 }
 
 QRadioButton {
-    color: rgb(120,127,139);
+    color: rgb(255,255,255);
 }
 
 QTabBar::tab {
-    color: rgb(120,127,139);
+    color: rgb(255,255,255);
     border: 1px solid rgb(78,79,83);
     border-bottom: none; padding: 5px;
 }
 
 QTabBar::tab:selected {
-    background: rgb(41,44,48);
+    background: rgb(34,49,70);
 }
 
 QTabBar::tab:!selected {
-    background: rgb(24,26,30);
+    background: rgb(22,39,61);
     margin-top: 2px;
 }
 
@@ -97,10 +100,10 @@ QTabWidget::pane {
 }
 
 QToolButton {
-    background: rgb(24,26,30);
-    color: rgb(116,122,134);
+    background: rgb(22,39,61);
+    color: rgb(255,255,255);
     border: none;
-    border-left-color: rgb(24,26,30);
+    border-left-color: rgb(22,39,61);
     border-left-style: solid;
     border-left-width: 6px;
     margin-top: 8px;
@@ -110,24 +113,24 @@ QToolButton {
 QToolButton:checked {
     color: rgb(255,255,255);
     border: none;
-    border-left-color: rgb(255,221,85);
+    border-left-color: rgb(21,165,211);
     border-left-style: solid;
     border-left-width: 6px;
 }
 
 QProgressBar {
-    color: rgb(149,148,148);
+    color: rgb(255,255,255);
     border-color: rgb(255,255,255);
     border-width: 3px;
     border-style: solid;
 }
 
 QProgressBar::chunk {
-    background: rgb(255,255,255);
+    background: rgb(21,165,211);
 }
 
 QTreeView::item {
-    background: rgb(41,44,48);
+    background: rgb(34,49,70);
     color: rgb(212,213,213);
 }
 
@@ -147,6 +150,6 @@ QHeaderView::section {
 }
 
 QToolBar {
-    background: rgb(24,26,30);
+    background: rgb(22,39,61);
     border: none;
 }
