@@ -1444,7 +1444,7 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
                 wtxNew.fFromMe = true;
 
                 int64_t nTotalValue = nValue + nFeeRet;
-                if (nSplitBlock < 1)                
+                if (nSplitBlock < 1)
                     nSplitBlock = 1;
 
                 // vouts to the payees
@@ -1601,7 +1601,7 @@ bool CWallet::GetStakeWeight(uint64_t& nMinWeight, uint64_t& nMaxWeight, uint64_
 
             // Maximum weight was reached
             if (nTimeWeight == nStakeMaxAge)
-                nMaxWeight += bnCoinDayWeight.getuint64();            
+                nMaxWeight += bnCoinDayWeight.getuint64();
         } else {
             nMinWeight = nWeight;
         }
@@ -1652,7 +1652,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         for (unsigned int n=0; n<min(nSearchInterval,(int64_t)nMaxStakeSearchInterval) && !fKernelFound && pindexPrev == pindexBest; n++)
         {
             boost::this_thread::interruption_point();
-            // Search backward in time from the given txNew timestamp 
+            // Search backward in time from the given txNew timestamp
             // Search nSearchInterval seconds back up to nMaxStakeSearchInterval
             COutPoint prevoutStake = COutPoint(pcoin.first->GetHash(), pcoin.second);
             int64_t nBlockTime;
@@ -1713,17 +1713,13 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
                 // and decide whether to split the stake outputs
                 uint64_t nCoinAge;
                 CTxDB txdb("r");
-                const CBlockIndex* pIndex0 = GetLastBlockIndex(pindexBest, false);
-                if (!txNew.GetCoinAge(txdb, pindexBest, nCoinAge))
-                    return error("CreateCoinStake : failed to calculate coin age");
-                uint64_t nTotalSize = pcoin.first->vout[pcoin.second].nValue + GetProofOfStakeReward(pIndex0, nCoinAge, nFees);
+                if (txNew.GetCoinAge(txdb, pindexBest, nCoinAge))
+                {
+                    uint64_t nTotalSize = pcoin.first->vout[pcoin.second].nValue + GetProofOfStakeReward(pindexBest, nCoinAge, 0);
+                    if (nTotalSize / 2 > nStakeSplitThreshold * COIN)
+                        txNew.vout.push_back(CTxOut(0, scriptPubKeyOut)); //split stake
+                }
 
-                LogPrintf("CreateCoinStake: totalSize=%d nStakeSplitThreshold=%d\n", nTotalSize, nStakeSplitThreshold);
-
-                // Split stake
-                if (nTotalSize / 2 > nStakeSplitThreshold * COIN)
-                    txNew.vout.push_back(CTxOut(0, scriptPubKeyOut));
-        
                 LogPrint("coinstake", "CreateCoinStake : added kernel type=%d\n", whichType);
                 fKernelFound = true;
                 break;
@@ -1745,15 +1741,18 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             && pcoin.first->GetHash() != txNew.vin[0].prevout.hash)
         {
             int64_t nTimeWeight = GetWeight((int64_t)pcoin.first->nTime, (int64_t)txNew.nTime);
-            
+
             // Stop adding more inputs if already too many inputs
             if (txNew.vin.size() >= 10)
+                break;
+            // Stop adding more inputs if value is already pretty significant
+            if (nCredit >= nStakeSplitThreshold)
                 break;
             // Stop adding inputs if reached reserve limit
             if (nCredit + pcoin.first->vout[pcoin.second].nValue > nBalance - nReserveBalance)
                 break;
             // Do not add additional significant input
-            if (pcoin.first->vout[pcoin.second].nValue >= GetStakeCombineThreshold())
+            if (pcoin.first->vout[pcoin.second].nValue >= nStakeSplitThreshold)
                 continue;
             // Do not add input that is still too young
             if (nTimeWeight < nStakeMinAge)
@@ -1779,8 +1778,8 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         nCredit += nReward;
     }
 
-    if (nCredit >= GetStakeSplitThreshold())
-        txNew.vout.push_back(CTxOut(0, txNew.vout[1].scriptPubKey)); //split stake
+    // if (nCredit >= GetStakeSplitThreshold())
+    //     txNew.vout.push_back(CTxOut(0, txNew.vout[1].scriptPubKey)); //split stake
 
     // Set output amount
     if (txNew.vout.size() == 3)
