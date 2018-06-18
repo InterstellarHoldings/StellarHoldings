@@ -996,9 +996,13 @@ uint64_t GetProofOfStakeReward(const CBlockIndex* pindexPrev, uint64_t nCoinAge,
 {
 	uint64_t nSubsidy;
 
-	nSubsidy = nCoinAge * GetCoinYearReward(pindexPrev->nHeight) * 33 / (365 * 33 + 8);
-
-	LogPrint("creation", "GetProofOfStakeReward(): coinYearReward=%d create=%s nCoinAge=%d\n", GetCoinYearReward(pindexPrev->nHeight), FormatMoney(nSubsidy), nCoinAge);
+	if (pindexPrev->nHeight >= SOFT_FORK_VERSION_104) {
+		nSubsidy = 5000 * COIN;
+		LogPrint("creation", "%s(): create=%s\n", __func__, FormatMoney(nSubsidy));
+	} else {
+		nSubsidy = nCoinAge * GetCoinYearReward(pindexPrev->nHeight) * 33 / (365 * 33 + 8);
+		LogPrint("creation", "%s(): coinYearReward=%d create=%s nCoinAge=%d\n", __func__, GetCoinYearReward(pindexPrev->nHeight), FormatMoney(nSubsidy), nCoinAge);
+	}
 
 	return nSubsidy + nFees;
 }
@@ -1011,8 +1015,8 @@ CBigNum GetWeightSpent(CBlockIndex* pindex)
 	CBlock block;
 	if (!block.ReadFromDisk(pindex, true))
 		return 0;
-	
-	// get staked txin 
+
+	// get staked txin
 	CTxIn txInStake = block.vtx[1].vin[0];
 
 	// load the txin transaction.
@@ -1869,7 +1873,7 @@ bool CBlock::SetBestChain(CTxDB& txdb, CBlockIndex* pindexNew)
 // ppcoin: total coin age spent in transaction, in the unit of coin-days.
 // Only those coins meeting minimum age requirement counts. As those
 // transactions not in main chain are not currently indexed so we
-// might not find out about their coin age. Older transactions are 
+// might not find out about their coin age. Older transactions are
 // guaranteed to be in main chain by sync-checkpoint. This rule is
 // introduced to help nodes establish a consistent view of the coin
 // age (trust score) of competing branches.
@@ -2934,10 +2938,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 		CAddress addrFrom;
 		uint64_t nNonce = 1;
 		vRecv >> pfrom->nVersion >> pfrom->nServices >> nTime >> addrMe;
-		if (pfrom->nVersion < MIN_PEER_PROTO_VERSION || 
-			(nBestHeight >= 15000 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_B15K) ||
-			(nBestHeight >= 20000 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_B20K) ||
-			(nBestHeight >= 25000 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_B25K))
+		if (pfrom->nVersion < MIN_PEER_PROTO_VERSION ||
+			(nBestHeight >= SOFT_FORK_VERSION_104 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_104) )
 		{
 			// disconnect from peers older than this proto version
 			LogPrintf("partner %s using obsolete version %i; disconnecting\n", pfrom->addr.ToString(), pfrom->nVersion);
@@ -3341,8 +3343,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 
 	// This asymmetric behavior for inbound and outbound connections was introduced
 	// to prevent a fingerprinting attack: an attacker can send specific fake addresses
-	// to users' AddrMan and later request them by sending getaddr messages. 
-	// Making users (which are behind NAT and can only make outgoing connections) ignore 
+	// to users' AddrMan and later request them by sending getaddr messages.
+	// Making users (which are behind NAT and can only make outgoing connections) ignore
 	// getaddr message mitigates the attack.
 	else if ((strCommand == "getaddr") && (pfrom->fInbound))
 	{

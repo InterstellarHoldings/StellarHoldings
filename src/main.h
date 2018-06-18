@@ -110,7 +110,8 @@ inline int64_t FutureDrift(int64_t nTime) { return nTime + 10 * 60; }
 
 inline unsigned int GetTargetSpacing(int nHeight) {
     // Starting at block 20k we raise the avergage block time to 4 minutes.
-    if (nHeight >= 20000)
+    // v1.0.4 - Lower blocktime to 2 minutes
+    if (nHeight >= 20000 && nHeight <= SOFT_FORK_VERSION_104)
         return 240;
 
     // defaults to 2 minutes.
@@ -927,7 +928,7 @@ public:
     uint64_t nMoneySupply;
 
     unsigned int nFlags;  // ppcoin: block index flags
-    enum  
+    enum
     {
         BLOCK_PROOF_OF_STAKE = (1 << 0), // is proof-of-stake block
         BLOCK_STAKE_ENTROPY  = (1 << 1), // entropy bit for stake modifier
