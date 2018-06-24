@@ -1,4 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/styles">
+        <file alias="holdify">res/holdify.qss</file>
+    </qresource>
     <qresource prefix="/icons">
         <file alias="bitcoin">res/icons/InterstellarHoldings-80.png</file>
         <file alias="address-book">res/icons/address-book.png</file>
@@ -25,6 +28,7 @@
         <file alias="add">res/icons/add.png</file>
         <file alias="bitcoin_testnet">res/icons/InterstellarHoldings-80.png</file>
         <file alias="toolbar_testnet">res/icons/InterstellarHoldings-16.png</file>
+        <file alias="sidebar_logo">res/icons/InterstellarHoldings-128.png</file>
         <file alias="edit">res/icons/edit.png</file>
         <file alias="history">res/icons/history.png</file>
         <file alias="overview">res/icons/overview.png</file>
@@ -43,7 +47,6 @@
         <file alias="debugwindow">res/icons/debugwindow.png</file>
         <file alias="staking_off">res/icons/staking_off.png</file>
         <file alias="staking_on">res/icons/staking_on.png</file>
-        <file alias="logo_backg">res/icons/logo_backg.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.png</file>
@@ -52,6 +55,11 @@
     <qresource prefix="/movies">
         <file alias="update_spinner">res/movies/update_spinner.mng</file>
         <file alias="update_spinner_black">res/movies/update_spinner_black.mng</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file alias="quantico">res/fonts/Quantico-Regular.ttf</file>
+        <file alias="roboto_light">res/fonts/Roboto-Light.ttf</file>
+        <file alias="roboto_regular">res/fonts/Roboto-Regular.ttf</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="ar">locale/bitcoin_ar.qm</file>
